@@ -1,11 +1,8 @@
+section .text
 ; ti404, runs on i4004 and a thread ripper :D
 
+add eax, 600
 
-db 0xEB, 0xEB ; NOP NOP on i4004 and JMP 235 on threadripper.
-
-
-; somehow, this needs to be forced 235 bytes away from db
-threadripper_start:
 mov rsi, h ; pointer to h
 mov al, [rsi] ; h first byte in asl
 ; repeat
@@ -32,7 +29,6 @@ db 0b11111, 0b10000, 0b10000, 0b11111, 0b10000, 0b10000, 0b11111
 l:
 db 0b10000, 0b10000, 0b10000, 0b10000, 0b10000, 0b10000, 0b11111
 
-
 o:
 db 0b11111, 0b10001, 0b10001, 0b10001, 0b10001, 0b10001, 0b11111
 
@@ -44,3 +40,5 @@ db 0b11111, 0b10001, 0b11111, 0b11000, 0b10100, 0b10010, 0b10001
 
 d:
 db 0b11110, 0b10001, 0b10001,  0b10001, 0b10001, 0b10001, 0b11110
+
+i4004_start:
