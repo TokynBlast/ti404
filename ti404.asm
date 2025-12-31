@@ -1,47 +1,27 @@
-section .text
 ; ti404, runs on i4004 and a thread ripper :D
+add eax, 0x67
 
-add eax, 600
-
-mov rsi, h ; pointer to h
-mov al, [rsi] ; h first byte in asl
-; repeat
-mov rsi, e
-mov al, [rsi]
-mov rsi, l
-mov al, [rsi]
-mov rsi, o
-mov al, [rsi]
-mov rsi, w
-mov al, [rsi]
-mov rsi, r
-mov al, [rsi]
-mov rsi, d
-mov al, [rsi]
+global _start
 
 section .data
-h:
-db 0b10001, 0b10001, 0b10001, 0b11111, 0b10001, 0b10001, 0b10001
+msg:    db "Hello world", 10   ; 10 = newline
+len:    equ $ - msg            ; length of string
 
-e:
-db 0b11111, 0b10000, 0b10000, 0b11111, 0b10000, 0b10000, 0b11111
+section .text
+_start:
+    mov rax, 1      ; syscall: write
+    mov rdi, 1      ; fd: stdout
+    lea rsi, [rel msg] ; pointer to string
+    mov rdx, len    ; length
+    syscall
 
-l:
-db 0b10000, 0b10000, 0b10000, 0b10000, 0b10000, 0b10000, 0b11111
+    ; exit
+    mov rax, 60     ; syscall: exit
+    xor rdi, rdi    ; exit code 0
+    syscall
 
-o:
-db 0b11111, 0b10001, 0b10001, 0b10001, 0b10001, 0b10001, 0b11111
 
-w:
-db 0x0, 0x0, 0x0, 0x0, 0b10101, 0b10101, 0b11111
-
-r:
-db 0b11111, 0b10001, 0b11111, 0b11000, 0b10100, 0b10010, 0b10001
-
-d:
-db 0b11110, 0b10001, 0b10001,  0b10001, 0b10001, 0b10001, 0b11110
-
-.fill 599, 599-(.-start),1,0x90
+.org 0x67
 
 i4004_start:
 
@@ -83,3 +63,4 @@ db 0xCA, 0xE0   ; '\n' -> 0x0A low nibble A, WRR
 
 ; loop till off :3
 db 0x40, 0x1E   ; JUN to this instruction (address = current ROM offset)
+
